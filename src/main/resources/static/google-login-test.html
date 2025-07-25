@@ -9,7 +9,7 @@
 <h1>Google Login Test</h1>
 
 <div id="g_id_onload"
-     data-client_id="여기에_CLIENT_ID.apps.googleusercontent.com"
+     data-client_id="1081259194070-mq727mg4rbisdltfim52c2gnijo8lrlq.apps.googleusercontent.com"
      data-callback="handleCredentialResponse"
      data-auto_prompt="false">
 </div>
@@ -31,7 +31,7 @@
         document.getElementById('result').innerHTML = '<p>구글 로그인 성공! ID Token을 받았습니다.</p><p>서버로 전송 중...</p>';
 
         // Spring Boot API 호출
-        fetch('http://localhost:8080/api/auth/google', {
+        fetch('http://localhost:8080/auth/google-login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -42,7 +42,7 @@
         })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error('서버 오류 또는 로그인 실패');
                 }
                 return response.json();
             })
@@ -51,8 +51,8 @@
                 document.getElementById('result').innerHTML =
                     '<h3>로그인 성공!</h3>' +
                     '<p>JWT Token: ' + data.token + '</p>' +
-                    '<p>Email: ' + data.email + '</p>' +
-                    '<p>Name: ' + data.name + '</p>';
+                    (data.email ? '<p>Email: ' + data.email + '</p>' : '') +
+                    (data.name ? '<p>Name: ' + data.name + '</p>' : '');
             })
             .catch((error) => {
                 console.error('Error:', error);

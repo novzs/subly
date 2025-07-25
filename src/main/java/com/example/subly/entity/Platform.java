@@ -17,5 +17,5 @@ public class Platform {
     private Long id;
 
     @Column(name = "platform_name", nullable = false, unique = true)
-    private String platformName;
+    private String Name;
 }
