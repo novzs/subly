@@ -1,13 +1,10 @@
 package com.example.subly.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-import lombok.Setter;
-
 import jakarta.persistence.*;
+import lombok.*;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -22,8 +19,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
-    private String email;
+    @Column(unique = true)
+    private String email;  // 이메일은 공통으로 사용
 
     @Column(nullable = false)
     private String nickname;
@@ -31,25 +28,18 @@ public class User {
     @Column(name = "profile_image_url")
     private String profileImageUrl;
 
-    @Column(nullable = false)
-    private String provider;
-
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
-
-    @Column(name = "last_login_at")
-    private LocalDateTime lastLoginAt;
 
     @Column(name = "is_active", nullable = false)
     private Boolean isActive;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<OAuthAccount> accounts;
+
     @PrePersist
     protected void onCreate() {
-        if (createdAt == null) {
-            createdAt = LocalDateTime.now();
-        }
-        if (isActive == null) {
-            isActive = true;
-        }
+        if (createdAt == null) createdAt = LocalDateTime.now();
+        if (isActive == null) isActive = true;
     }
 }
